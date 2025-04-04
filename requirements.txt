@@ -1,0 +1,11 @@
+cleanlab-studio
+pandas
+matplotlib
+requests
+certifi
+python-dotenv
+nbformat
+unstructured_client
+llama-index
+llama-index-embeddings-huggingface
+openai
