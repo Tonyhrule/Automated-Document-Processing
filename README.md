@@ -1,57 +1,90 @@
 # Automating Trustworthy Document Processing with Cleanlab and Unstructured
 
-## Proposed Sample Pipeline
+## Overview
+This repository illustrates a system that combines Cleanlab's Trustworthy Language Model (TLM) with Unstructured's document processing capabilities to create reliable document processing pipelines for Retrieval-Augmented Generation (RAG) applications. This repository contains the code for a tutorial that demonstrates how to build such a system.
 
-- Unstructured documents (e.g., PDFs/images) enter [unstructured.io](https://unstructured.io) to make them much easier to process.
-- CleanLab TLM is used to extract necessary information.
-- Example: Profiles from tables of different types and formats in different documents (first name, last name, gender).
-  - CleanLab would be asked: *"From this table/row, provide the user's first name, last name, and gender."*
+We addresses three key challenges in building reliable AI systems:
+- **Document Preprocessing**: Converting diverse document formats into structured, machine-readable text
+- **Hallucination Mitigation**: Reducing false information by grounding LLM responses in verified data
+- **Trustworthiness Assessment**: Quantifying the reliability of AI-generated responses
 
-## Purpose
+## Installation
 
-This project advertises CleanLab by demonstrating that the TLM is a superior drop-in replacement for LLMs in data processing.
+### Requirements
+- Python 3.8+
+- API keys for Cleanlab and Unstructured
 
-- In the unstructured documentation and videos, OpenAI GPT is used to extract data from unstructured.io outputs.
-- TLMs are a drop-in replacement for the LLMs but also provide a truthfulness score that can validate data accuracy and detect potentially problematic sources.
-- Demonstrates the ease of implementation.
+### Setup
+1. Clone the repository:
+```bash
+git clone https://github.com/Tonyhrule/Automated-Document-Processing.git
+cd Automated-Document-Processing
+```
 
-### Repo Structure
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-- `notebooks/`: Jupyter notebooks for data analysis and visualization
-  - `data_validation.ipynb`: Main notebook demonstrating the validation pipeline
-- `src/`: Source code for the validation system
-  - `data_validation.py`: Core validation logic
-  - `document_processor.py`: Document processing utilities
-  - `config.py`: Configuration settings
+3. Create a `.env` file in the root directory with your API keys:
+```
+CLEANLAB_API_KEY=your_cleanlab_api_key
+UNSTRUCTURED_API_KEY=your_unstructured_api_key
+UNSTRUCTURED_API_URL=https://api.unstructured.io/general/v0/general
+```
 
-### Setup Process
+## Project Structure
 
-1. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```
+Automated-Document-Processing/
+├── AutoDoc_Notebook.ipynb   # Interactive tutorial notebook
+├── README.md                # This file
+├── requirements.txt         # Project dependencies
+└── src/                     # Source code
+    ├── __init__.py          # Exports DocumentProcessor
+    ├── config.py            # Environment configuration
+    ├── data/                # Sample data
+    │   ├── nfl.pdf          # NFL statistics PDF
+    │   └── nfl_tables.json  # Extracted tables from PDF
+    ├── document_processor.py # Core document processing class
+    ├── helpers/             # Utility functions
+    │   ├── data.py          # Data utilities (JSON, file operations)
+    │   ├── input.py         # CLI utilities
+    │   ├── oai.py           # OpenAI integration
+    │   ├── progress.py      # Progress tracking
+    │   ├── tlm.py           # TLM integration with LlamaIndex
+    │   └── variables.py     # Common variables
+    ├── nfl_data.py          # NFL data extraction
+    ├── nfl_llm.py           # Query engine for NFL data
+    └── pipeline_demo.py     # Full pipeline demonstration
+```
 
-2. Set up environment variables in `.env`:
-   ```
-   CLEANLAB_API_KEY=your_api_key
-   ```
+## Components
 
-3. Run the Jupyter notebook:
-   ```bash
-   jupyter notebook notebooks/data_validation.ipynb
-   ```
+### DocumentProcessor
+The core class that handles document processing, table detection, and profile extraction:
+- `process_documents()`: Processes text files and generates JSON output
+- `detect_table_content()`: Detects tabular data in text
+- `extract_profile_info()`: Extracts structured profile information
 
-### Analysis Pipeline
+### TLM Integration
+Integration with Cleanlab's Trustworthy Language Model:
+- Custom wrappers for TLM and LLM
+- Query engines for semantic search and RAG
+- Trustworthiness assessment of responses
 
-1. **Data Loading**: Load medical records from CSV file
-2. **Record Analysis**: Process each record using Cleanlab TLM
-3. **Trustworthiness Scoring**: Calculate trustworthiness scores
-4. **Visualization**: Generate distribution and scatter plots
-5. **Results Display**: Show detailed analysis with color-coded trustworthiness
+### Unstructured Integration
+Document processing with Unstructured:
+- PDF partitioning and table extraction
+- Structured data extraction from complex documents
+- Preservation of document structure
 
-### Visualization Features
+## Tutorial
+For a walkthrough of the system, refer to the [AutoDoc_Notebook.ipynb](AutoDoc_Notebook.ipynb) in this repository.
 
-- **Distribution Plot**: KDE plot showing trustworthiness score distribution
-- **Scatter Plot**: Record-by-record visualization with color gradient
-- **Statistics Display**: Comprehensive analysis summary
-- **Threshold Line**: Clear indication of review threshold (0.85)
+## Links
+- [Cleanlab](https://cleanlab.ai/) for the Trustworthy Language Model
+- [Unstructured](https://unstructured.io/) for document processing capabilities
+
+## License
+This project is licensed under the MIT License – see the [LICENSE](LICENSE) file for details.
